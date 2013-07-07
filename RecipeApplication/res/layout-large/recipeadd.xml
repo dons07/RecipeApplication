@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/recipeHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Recipe Name"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/recipeName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/recipeCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Cost"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/cost"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:inputType="numberDecimal"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/servingsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Enter Amount of Servings"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/recipeServings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:inputType="number"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/recipeHealthRatingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Recipe Heatlh Rating"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/recipeHealthRating"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:inputType="number"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/recipeTasteRatingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Recipe Taste Rating"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/recipeTasteRating"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:inputType="number"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/enterIngredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="goEnterIngredient"
+        android:text="Enter ingredients" />
+
+</LinearLayout>

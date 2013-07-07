@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="Menu">
+        <item>List Most Recent Recipes</item>
+        <item>Search For A Recipe</item>
+        <item>Insert a new Recipe</item>
+        <item>Search for a user </item>
+        <item>Recipe of the Day </item>
+    </array>
+</resources>
