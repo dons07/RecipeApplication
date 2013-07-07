@@ -20,11 +20,23 @@ public abstract class RESTResponderFragment extends Fragment {
 			@Override
 			protected void onReceiveResult(int resultCode, Bundle resultData) {
 				if (resultData != null
-						&& resultData.containsKey(RestService.REST_RESULT)) {
-					onRESTResult(resultCode,
-							resultData.getString(RestService.REST_RESULT));
+						&& resultData
+								.containsKey(RestService.REST_AUTHENTICATION)) {
+					onRESTResult(
+							resultCode,
+							resultData
+									.getString(RestService.REST_AUTHENTICATION),
+							RestService.REST_AUTHENTICATION);
+				} else if (resultData != null
+						&& resultData.containsKey(RestService.REST_POST_RECIPE)) {
+					resultData.getString(RestService.REST_POST_RECIPE);
+					onRESTResult(
+							resultCode,
+							resultData
+									.getString(RestService.REST_AUTHENTICATION),
+							RestService.REST_AUTHENTICATION);
 				} else {
-					onRESTResult(resultCode, null);
+					onRESTResult(resultCode, null,null);
 				}
 			}
 
@@ -48,5 +60,5 @@ public abstract class RESTResponderFragment extends Fragment {
 	}
 
 	// Implementers of this Fragment will handle the result here.
-	abstract public void onRESTResult(int code, String result);
+	abstract public void onRESTResult(int code, String result, String returnType);
 }

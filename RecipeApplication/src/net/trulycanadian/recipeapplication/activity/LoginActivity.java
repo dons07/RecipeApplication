@@ -2,7 +2,7 @@ package net.trulycanadian.recipeapplication.activity;
 
 import net.trulycanadian.recipeapplication.R;
 import net.trulycanadian.recipeapplication.algo.PassEncoding;
-import net.trulycanadian.recipeapplication.fragment.UserAuthenticationFragment;
+import net.trulycanadian.recipeapplication.fragment.RestAssuredServiceFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -27,7 +27,7 @@ public class LoginActivity extends FragmentActivity {
 	SharedPreferences appPrefs1;
 	String prefs1 = "recipeapplication";
 	SharedPreferences.Editor appPrefsEditor;
-	UserAuthenticationFragment responder;
+	RestAssuredServiceFragment responder;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +47,10 @@ public class LoginActivity extends FragmentActivity {
 		// onCreate() method. So that means
 		// we need to check if our FragmentManager is already storing an
 		// instance of the responder.
-		responder = (UserAuthenticationFragment) fm
+		responder = (RestAssuredServiceFragment) fm
 				.findFragmentByTag("RESTResponder");
 		if (responder == null) {
-			responder = new UserAuthenticationFragment();
+			responder = new RestAssuredServiceFragment();
 
 			// We add the fragment using a Tag since it has no views. It will
 			// make the Twitter REST call

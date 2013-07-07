@@ -1,6 +1,8 @@
 package net.trulycanadian.recipleapplication.model;
 
-public class SimpleRecipe {
+import java.io.Serializable;
+
+public class SimpleRecipe implements Serializable{
 
 	public float getCost() {
 		return cost;

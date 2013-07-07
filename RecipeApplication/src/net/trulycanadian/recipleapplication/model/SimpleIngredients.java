@@ -1,6 +1,8 @@
 package net.trulycanadian.recipleapplication.model;
 
-public class SimpleIngredients {
+import java.io.Serializable;
+
+public class SimpleIngredients implements Serializable {
 	public String getName() {
 		return name;
 	}
