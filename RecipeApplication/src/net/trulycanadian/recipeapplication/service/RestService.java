@@ -48,6 +48,7 @@ public class RestService extends IntentService {
 	public static final int DELETE = 0x4;
 	public static final int POSTINGREDIENT = 0x5;
 	public static final int POSTRECIPE = 0x6;
+	public static final int GETRECIPES = 0x7;
 
 	public static final String EXTRA_HTTP_VERB = "net.neilgoodman.android.restservicetutorial.EXTRA_HTTP_VERB";
 	public static final String ARGS_PARAMS = "net.trulycanadian.recipeapplication.activity.ARGS_PARAMS";
@@ -55,6 +56,7 @@ public class RestService extends IntentService {
 
 	public static final String REST_AUTHENTICATION = "net.trulycanadian.AUTHENTICATION";
 	public static final String REST_POST_RECIPE = "net.trulycanadian.POSTRECIPE";
+	public static final String REST_GET_RECIPES = "net.trulycanadian.GETRECIPES";
 
 	public RestService() {
 		super(TAG);
@@ -92,6 +94,61 @@ public class RestService extends IntentService {
 			// Let's build our request based on the HTTP verb we were
 			// given.
 			switch (verb) {
+			case GETRECIPES: {
+				request = new HttpGet();
+				System.out.println("got to get");
+				String combined = params.getString("username") + ":"
+						+ params.getString("password");
+				System.out.println(combined);
+				request.setHeader(
+						"Authorization",
+						"Basic "
+								+ Base64.encodeToString(combined.getBytes(),
+										Base64.NO_WRAP));
+				attachUriWithQuery(request, action, params);
+
+				resultData.putString(REST_GET_RECIPES, "GetRecipes");
+				if (request != null) {
+					HttpClient client = new DefaultHttpClient();
+
+					// Let's send some useful debug information so we can
+					// monitor
+					// things
+					// in LogCat.
+					Log.d(TAG, "Executing request: " + verbToString(verb)
+							+ ": " + action.toString());
+
+					// Finally, we send our request using HTTP. This is the
+					// synchronous
+					// long operation that we need to run on this thread.
+					HttpResponse response = client.execute(request);
+
+					HttpEntity responseEntity = response.getEntity();
+					resultData.putString("json",
+							EntityUtils.toString(responseEntity));
+					StatusLine responseStatus = response.getStatusLine();
+					int statusCode = responseStatus != null ? responseStatus
+							.getStatusCode() : 0;
+
+					// Our ResultReceiver allows us to communicate back the
+					// results
+					// to the caller. This
+					// class has a method named send() that can send back a code
+					// and
+					// a Bundle
+					// of data. ResultReceiver and IntentService abstract away
+					// all
+					// the IPC code
+					// we would need to write to normally make this work.
+					if (responseEntity != null) {
+						receiver.send(statusCode, resultData);
+					} else {
+						receiver.send(statusCode, null);
+					}
+				}
+			}
+				break;
+
 			case GETAUTH: {
 				request = new HttpGet();
 				System.out.println("got to get");
@@ -152,6 +209,7 @@ public class RestService extends IntentService {
 				break;
 
 			case POSTRECIPE: {
+				resultData.putString(REST_POST_RECIPE, "Authentication");
 				request = new HttpPost();
 				request.setURI(new URI(action.toString()));
 
@@ -236,6 +294,7 @@ public class RestService extends IntentService {
 						"Basic "
 								+ Base64.encodeToString(combined.getBytes(),
 										Base64.NO_WRAP));
+
 				if (request != null) {
 					HttpClient client = new DefaultHttpClient();
 					Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -342,6 +401,9 @@ public class RestService extends IntentService {
 
 	private static String verbToString(int verb) {
 		switch (verb) {
+		case GETRECIPES:
+			return "GETRECIPES";
+
 		case GETAUTH:
 			return "GET";
 

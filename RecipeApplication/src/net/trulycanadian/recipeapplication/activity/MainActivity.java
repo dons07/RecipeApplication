@@ -3,10 +3,13 @@ package net.trulycanadian.recipeapplication.activity;
 import java.util.ArrayList;
 
 import net.trulycanadian.recipeapplication.R;
+import net.trulycanadian.recipeapplication.adapter.RecipeAdapter;
 import net.trulycanadian.recipeapplication.algo.PassEncoding;
 import net.trulycanadian.recipeapplication.fragment.InsertIngredient;
 import net.trulycanadian.recipeapplication.fragment.InsertRecipe;
+import net.trulycanadian.recipeapplication.fragment.ListRecipes;
 import net.trulycanadian.recipeapplication.fragment.RestAssuredServiceFragment;
+import net.trulycanadian.recipleapplication.model.RecipeSum;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;
 import net.trulycanadian.recipleapplication.model.SimpleRecipe;
 import android.content.SharedPreferences;
@@ -25,6 +28,7 @@ public class MainActivity extends FragmentActivity {
 	SharedPreferences appPrefs1;
 	String prefs1 = "recipeapplication";
 	SharedPreferences.Editor appPrefsEditor;
+	private RecipeAdapter recipeAdapter;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -94,9 +98,39 @@ public class MainActivity extends FragmentActivity {
 			transaction.replace(R.id.frag_data, ingredient);
 			transaction.commit();
 			break;
+		case 2:
+
+			ListRecipes listRecipes = new ListRecipes();
+			// Replace whatever is in the fragment_container view with this
+			// fragment,
+			// and add the transaction to the back stack
+
+			transaction.replace(R.id.frag_data, listRecipes);
+			transaction.commit();
+			responder.getRecipes();
+			break;
+
 		default:
 			break;
 		}
+	}
+
+	public RecipeAdapter getArrayAdapter() {
+		return recipeAdapter;
+	}
+
+	public void setRecipes(ArrayList<RecipeSum> recipesums) {
+		FragmentManager fm = getSupportFragmentManager();
+
+		ListRecipes responder2 = (ListRecipes) fm
+				.findFragmentById(R.id.frag_data);
+		recipeAdapter = new RecipeAdapter(this,
+						R.layout.listviewrecipeitem, recipesums);
+		
+		responder2.setListAdapter(recipeAdapter);
+		recipeAdapter.notifyDataSetChanged();
+		recipeAdapter.notifyDataSetInvalidated();
+		
 	}
 
 	public void setIngredients(ArrayList<SimpleIngredients> ingredients) {
@@ -108,9 +142,14 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
+	public void getRecipes() {
+		responder.getRecipes();
+	}
+
 	public void setRecipe(SimpleRecipe recipe) {
 		this.recipe = recipe;
 	}
+
 	// Commit the transaction
 
 }

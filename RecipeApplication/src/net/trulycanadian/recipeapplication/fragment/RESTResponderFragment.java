@@ -30,13 +30,16 @@ public abstract class RESTResponderFragment extends Fragment {
 				} else if (resultData != null
 						&& resultData.containsKey(RestService.REST_POST_RECIPE)) {
 					resultData.getString(RestService.REST_POST_RECIPE);
-					onRESTResult(
-							resultCode,
-							resultData
-									.getString(RestService.REST_AUTHENTICATION),
-							RestService.REST_AUTHENTICATION);
+					onRESTResult(resultCode,
+							resultData.getString(RestService.REST_POST_RECIPE),
+							RestService.REST_POST_RECIPE);
+				} else if (resultData != null
+						&& resultData.containsKey(RestService.REST_GET_RECIPES)) {
+					resultData.getString(RestService.REST_GET_RECIPES);
+					onRESTResultJson(resultCode,
+							RestService.REST_GET_RECIPES,resultData);
 				} else {
-					onRESTResult(resultCode, null,null);
+					onRESTResult(resultCode, null, null);
 				}
 			}
 
@@ -61,4 +64,5 @@ public abstract class RESTResponderFragment extends Fragment {
 
 	// Implementers of this Fragment will handle the result here.
 	abstract public void onRESTResult(int code, String result, String returnType);
+	abstract public void onRESTResultJson(int code, String type, Bundle result);
 }

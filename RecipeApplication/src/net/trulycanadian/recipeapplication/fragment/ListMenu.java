@@ -14,7 +14,7 @@ public class ListMenu extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		String[] values = new String[] { "List Most Recent Recipes",
+		String[] values = new String[] { "List Recipes",
 				"Search For A Recipe", "Insert a new Recipe",
 				"Search for a user", "Recipe of the day" };
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
@@ -35,6 +35,11 @@ public class ListMenu extends ListFragment {
 		{
 			MainActivity activity = (MainActivity) getActivity();
 			activity.replaceView(1);
+		}
+		if (clickedView.getText().toString().contains("List Recipe"))
+		{
+			MainActivity activity = (MainActivity) getActivity();
+			activity.replaceView(2);
 		}
 	
 

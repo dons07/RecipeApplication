@@ -11,10 +11,10 @@ public class SimpleRecipe implements Serializable{
 		this.cost = cost;
 	}
 	public int getHealthRating() {
-		return healthRating;
+		return healthrating;
 	}
 	public void setHealthRating(int healthRating) {
-		this.healthRating = healthRating;
+		this.healthrating = healthRating;
 	}
 	public int getTasteRating() {
 		return tasteRating;
@@ -36,7 +36,7 @@ public class SimpleRecipe implements Serializable{
 	}
 	
 	private float cost;
-	private int healthRating;
+	private int healthrating;
 	private int tasteRating;
 	private String name;
 	private int servings;

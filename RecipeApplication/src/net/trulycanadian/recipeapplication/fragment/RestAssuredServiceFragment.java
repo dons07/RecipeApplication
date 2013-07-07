@@ -1,10 +1,12 @@
 package net.trulycanadian.recipeapplication.fragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import net.trulycanadian.recipeapplication.activity.LoginActivity;
 import net.trulycanadian.recipeapplication.activity.MainActivity;
 import net.trulycanadian.recipeapplication.service.RestService;
+import net.trulycanadian.recipleapplication.model.RecipeSum;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;
 import net.trulycanadian.recipleapplication.model.SimpleRecipe;
 
@@ -15,6 +17,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class RestAssuredServiceFragment extends RESTResponderFragment {
 
@@ -27,7 +32,34 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 
 	}
 
-	public void insertRecipe(SimpleRecipe recipe, ArrayList<SimpleIngredients> ingredients) {
+	public void getRecipes() {
+		MainActivity activity = (MainActivity) getActivity();
+		Bundle params = activity.getUserBundle();
+		Intent intent = new Intent(activity, RestService.class);
+		intent.setData(Uri
+				.parse("http://rental.trulycanadian.net:8080/recipe/api/recipe"));
+		intent.putExtra(RestService.EXTRA_HTTP_VERB, RestService.GETRECIPES);
+		intent.putExtra(RestService.ARGS_PARAMS, params);
+		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+
+		if (intent == null) {
+			System.out.println("error");
+
+		} else {
+		}
+		// Here we send our Intent to our RESTService.
+		activity.startService(intent);
+		if (activity != null) {
+			// Here we check to see if our activity is null or not.
+			// We only want to update our views if our activity exists.
+
+			// Load our list adapter with our Tweets.
+		}
+
+	}
+
+	public void insertRecipe(SimpleRecipe recipe,
+			ArrayList<SimpleIngredients> ingredients) {
 		MainActivity activity = (MainActivity) getActivity();
 		Bundle params = activity.getUserBundle();
 		Intent intent = new Intent(activity, RestService.class);
@@ -38,14 +70,11 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
 		intent.putExtra("recipe", recipe);
 		intent.putExtra("ingredients", ingredients);
-	
-		if (intent == null)
-		{
+
+		if (intent == null) {
 			System.out.println("error");
-			
-		}
-		else
-		{
+
+		} else {
 		}
 		// Here we send our Intent to our RESTService.
 		activity.startService(intent);
@@ -89,7 +118,7 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 		// LoaderCallbacks<D>.onLoadFinished() call from the previous tutorial.
 
 		// Check to see if we got an HTTP 200 code and have some data.
-		if (code == 200 && returnType == RestService.REST_AUTHENTICATION ) {
+		if (code == 200 && returnType == RestService.REST_AUTHENTICATION) {
 			LoginActivity activity = (LoginActivity) getActivity();
 			activity.startMainActivity();
 			// For really complicated JSON decoding I usually do my heavy
@@ -99,20 +128,34 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 			// and use a utility method that relies on some of the built in
 			// JSON utilities on Android.
 
-		} 
-		else if (code == HttpStatus.SC_CREATED && returnType == RestService.REST_POST_RECIPE)
-		{
+		} else if (code == HttpStatus.SC_CREATED
+				&& returnType == RestService.REST_POST_RECIPE) {
 			Activity activity = getActivity();
 			Toast.makeText(activity, "Inserted Recipe and ingredients",
 					Toast.LENGTH_SHORT).show();
-		}
-		
-		else if (code == 401 && result == RestService.REST_AUTHENTICATION){
+		} else if (code == 401 && returnType == RestService.REST_AUTHENTICATION) {
 			LoginActivity activity = (LoginActivity) getActivity();
 			activity.clearUserName();
 			Toast.makeText(activity, "Invalid user name or password.",
 					Toast.LENGTH_SHORT).show();
 
+		} else {
+			System.out.println(returnType + " " + code);
+		}
+	}
+
+	public void onRESTResultJson(int code, String returnType, Bundle result) {
+
+		System.out.println(returnType + code);
+		if (code == HttpStatus.SC_OK
+				&& returnType == RestService.REST_GET_RECIPES) {
+			System.out.println("got here");
+			String json = result.getString("json");
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			RecipeSum[] recipeSums = gson.fromJson(json, RecipeSum[].class); 
+			ArrayList<RecipeSum> recipeSumsArray =new ArrayList<RecipeSum>( Arrays.asList(recipeSums));
+			MainActivity activity = (MainActivity) getActivity();
+			activity.setRecipes(recipeSumsArray);
 		}
 	}
 }
