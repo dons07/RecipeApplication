@@ -38,15 +38,20 @@ public class InsertRecipe extends Fragment {
 						.findViewById(R.id.recipeTasteRating);
 				EditText servings = (EditText) view
 						.findViewById(R.id.recipeServings);
+
+				EditText directions = (EditText) view
+						.findViewById(R.id.directions);
+
 				SimpleRecipe recipe = new SimpleRecipe();
 				recipe.setName(name.getText().toString());
 				recipe.setCost(Float.parseFloat(cost.getText().toString()));
-				recipe.setHealthRating(Integer.parseInt(healthRating.getText()
+				recipe.setHealthrating(Integer.parseInt(healthRating.getText()
 						.toString()));
 				recipe.setTasteRating(Integer.parseInt(tasteRating.getText()
 						.toString()));
 				recipe.setServings(Integer.parseInt(servings.getText()
 						.toString()));
+				recipe.setDirections(directions.getText().toString());
 				activity.setRecipe(recipe);
 				activity.replaceView(12);
 			}

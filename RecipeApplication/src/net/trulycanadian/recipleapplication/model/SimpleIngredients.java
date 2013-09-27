@@ -9,10 +9,10 @@ public class SimpleIngredients implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public double getMeasurement() {
+	public Double getMeasurement() {
 		return measurement;
 	}
-	public void setMeasurement(double measurement) {
+	public void setMeasurement(Double measurement) {
 		this.measurement = measurement;
 	}
 	public String getUuid() {
@@ -28,7 +28,7 @@ public class SimpleIngredients implements Serializable {
 		this.unit = unit;
 	}
 	private String name;
-	private double measurement;
+	private Double measurement;
 	private String uuid;
 	private String unit;
 }

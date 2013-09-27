@@ -45,7 +45,7 @@ public class InsertIngredient extends Fragment {
 				SimpleIngredients ingredient = new SimpleIngredients();
 				ingredient.setName(name.getText().toString());
 				ingredient.setUnit(unit.getText().toString());
-				ingredient.setMeasurement(Float.parseFloat(serving.getText().toString()));				
+				ingredient.setMeasurement(Double.parseDouble(serving.getText().toString()));				
 				ingredients.add(ingredient);
 				name.setText("");
 				unit.setText("");

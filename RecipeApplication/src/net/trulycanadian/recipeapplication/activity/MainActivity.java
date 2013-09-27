@@ -9,6 +9,8 @@ import net.trulycanadian.recipeapplication.fragment.InsertIngredient;
 import net.trulycanadian.recipeapplication.fragment.InsertRecipe;
 import net.trulycanadian.recipeapplication.fragment.ListRecipes;
 import net.trulycanadian.recipeapplication.fragment.RestAssuredServiceFragment;
+import net.trulycanadian.recipeapplication.fragment.SingleRecipe;
+import net.trulycanadian.recipleapplication.model.RecipeDetailed;
 import net.trulycanadian.recipleapplication.model.RecipeSum;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;
 import net.trulycanadian.recipleapplication.model.SimpleRecipe;
@@ -75,6 +77,26 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
+	public void setDetailedRecipe(RecipeDetailed detailed) {
+		FragmentManager fm = getSupportFragmentManager();
+
+		SingleRecipe responder2 = (SingleRecipe) fm
+				.findFragmentById(R.id.frag_data);
+		responder2.fillInData(detailed);
+
+	}
+
+	public void loadRecipe(String number) {
+		FragmentTransaction transaction = getSupportFragmentManager()
+				.beginTransaction();
+		SingleRecipe recipeFragment = new SingleRecipe();
+
+		transaction.replace(R.id.frag_data, recipeFragment);
+		transaction.commit();
+		responder.getSingleRecipe(number);
+
+	}
+
 	public void replaceView(int id) {
 		// Create new fragment and transaction
 		FragmentTransaction transaction = getSupportFragmentManager()
@@ -124,13 +146,10 @@ public class MainActivity extends FragmentActivity {
 
 		ListRecipes responder2 = (ListRecipes) fm
 				.findFragmentById(R.id.frag_data);
-		recipeAdapter = new RecipeAdapter(this,
-						R.layout.listviewrecipeitem, recipesums);
-		
-		responder2.setListAdapter(recipeAdapter);
-		recipeAdapter.notifyDataSetChanged();
-		recipeAdapter.notifyDataSetInvalidated();
-		
+		recipeAdapter = new RecipeAdapter(this, R.layout.listviewrecipeitem,
+				recipesums);
+
+		responder2.setRecipeItems(recipesums);
 	}
 
 	public void setIngredients(ArrayList<SimpleIngredients> ingredients) {

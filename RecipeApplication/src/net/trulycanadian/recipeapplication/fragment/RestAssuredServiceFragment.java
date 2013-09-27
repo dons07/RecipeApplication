@@ -6,6 +6,7 @@ import java.util.Arrays;
 import net.trulycanadian.recipeapplication.activity.LoginActivity;
 import net.trulycanadian.recipeapplication.activity.MainActivity;
 import net.trulycanadian.recipeapplication.service.RestService;
+import net.trulycanadian.recipleapplication.model.RecipeDetailed;
 import net.trulycanadian.recipleapplication.model.RecipeSum;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;
 import net.trulycanadian.recipleapplication.model.SimpleRecipe;
@@ -30,6 +31,33 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 
 		// This gets called each time our Activity has finished creating itself.
 
+	}
+
+	public void getSingleRecipe(String id) {
+		MainActivity activity = (MainActivity) getActivity();
+		Bundle params = activity.getUserBundle();
+		System.out.println(params.getString("username"));
+		Intent intent = new Intent(activity, RestService.class);
+		intent.setData(Uri
+				.parse("http://rental.trulycanadian.net:8080/recipe/api/recipe/"
+						+ id));
+		intent.putExtra(RestService.EXTRA_HTTP_VERB, RestService.SINGLERECIPE);
+		intent.putExtra(RestService.ARGS_PARAMS, params);
+		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+
+		if (intent == null) {
+			System.out.println("error");
+
+		} else {
+		}
+		// Here we send our Intent to our RESTService.
+		activity.startService(intent);
+		if (activity != null) {
+			// Here we check to see if our activity is null or not.
+			// We only want to update our views if our activity exists.
+
+			// Load our list adapter with our Tweets.
+		}
 	}
 
 	public void getRecipes() {
@@ -149,13 +177,26 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 		System.out.println(returnType + code);
 		if (code == HttpStatus.SC_OK
 				&& returnType == RestService.REST_GET_RECIPES) {
-			System.out.println("got here");
+
 			String json = result.getString("json");
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			RecipeSum[] recipeSums = gson.fromJson(json, RecipeSum[].class); 
-			ArrayList<RecipeSum> recipeSumsArray =new ArrayList<RecipeSum>( Arrays.asList(recipeSums));
+			RecipeSum[] recipeSums = gson.fromJson(json, RecipeSum[].class);
+			ArrayList<RecipeSum> recipeSumsArray = new ArrayList<RecipeSum>(
+					Arrays.asList(recipeSums));
 			MainActivity activity = (MainActivity) getActivity();
 			activity.setRecipes(recipeSumsArray);
+		}
+		if (code == HttpStatus.SC_OK
+				&& returnType == RestService.REST_SINGLE_RECIPE) {
+			String json = result.getString("json");
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			MainActivity activity = (MainActivity) getActivity();
+			RecipeDetailed detailed = gson.fromJson(json, RecipeDetailed.class);
+			System.out.println(json);
+			System.out.println(detailed.getName());
+			System.out.println(detailed.getHealthrating());
+			activity.setDetailedRecipe(detailed);
+
 		}
 	}
 }
