@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/ingredientsLayout" >
+    
+    <TextView
+        android:id="@+id/ingredientNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Ingredient Name"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/ingredientName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/ingredientServingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Ingredient Serving"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/ingredientServing"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:inputType="numberDecimal"
+        android:textSize="12sp" />
+    
+    
+    <TextView
+        android:id="@+id/ingredientUnitText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Ingredient Unit"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/ingredientUnit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:textSize="12sp" />
+    
+      <Button
+        android:id="@+id/enterNewIngredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter more ingredients" />
+        
+        <Button
+        android:id="@+id/finishIngredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finished Entering Ingredients" />
+        
+    </LinearLayout>

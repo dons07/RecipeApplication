@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/recipeNameDetailedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recipe Name: " />
+
+    <TextView
+        android:id="@+id/recipeNameDetailed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/recipeNameDetailedText" />
+
+    <TextView
+        android:id="@+id/userCreatedlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipeNameDetailed"
+        android:text="User Created:  " />
+
+    <TextView
+        android:id="@+id/userCreated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipeNameDetailed"
+        android:layout_toRightOf="@id/userCreatedlabel" />
+
+    <TableLayout
+        android:id="@+id/ingredientsTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userCreated" >
+
+        <TableRow
+            android:id="@+id/row"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/runLabel"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:text="Ingredients" />
+
+            <TextView
+                android:id="@+id/hitLabel"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:text="Measurements" />
+
+            <TextView
+                android:id="@+id/errorLabel"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:text="Units" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/directionsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ingredientsTable"
+        android:text="Directions: " />
+
+    <TextView
+        android:id="@+id/directions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/directionsLabel" />
+
+    <TextView
+        android:id="@+id/healthRatingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/directions"
+        android:text="Health Rating: " />
+
+    <TextView
+        android:id="@+id/healthRatingCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/directions"
+        android:layout_toRightOf="@id/healthRatingLabel" />
+
+    <TextView
+        android:id="@+id/tasteRatingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "Taste Rating: "
+        android:layout_below="@id/healthRatingCount" />
+
+    <TextView
+        android:id="@+id/tasteRatingCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tasteRatingLabel"
+        android:layout_below="@id/healthRatingCount" />
+
+</RelativeLayout>
