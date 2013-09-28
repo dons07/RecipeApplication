@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.trulycanadian.recipeapplication.restretrievel.GetRecipes;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;
 import net.trulycanadian.recipleapplication.model.SimpleRecipe;
 import net.trulycanadian.recipleapplication.model.uuid;
@@ -126,36 +127,13 @@ public class RestService extends IntentService {
 			}
 				break;
 
-			case GETRECIPES: {
-				request = new HttpGet();
-				System.out.println("got to get");
-				String combined = params.getString("username") + ":"
-						+ params.getString("password");
-				System.out.println(combined);
-				request.setHeader(
-						"Authorization",
-						"Basic "
-								+ Base64.encodeToString(combined.getBytes(),
-										Base64.NO_WRAP));
-				attachUriWithQuery(request, action, params);
+			case GETRECIPES:
+				GetRecipes webCommand = new GetRecipes();
+				webCommand.setAction(action);
+				resultData = webCommand.retrieveResults(params);
+				int status = resultData.getInt("statuscode");
+				receiver.send(status, resultData);
 
-				resultData.putInt(RestService.REST_COMMAND,
-						RestService.GETRECIPES);
-				if (request != null) {
-					HttpClient client = new DefaultHttpClient();
-
-					HttpResponse response = client.execute(request);
-					HttpEntity responseEntity = response.getEntity();
-					resultData.putString("json",
-							EntityUtils.toString(responseEntity));
-					StatusLine responseStatus = response.getStatusLine();
-					int statusCode = responseStatus != null ? responseStatus
-							.getStatusCode() : 0;
-					resultData.putInt("statuscode", statusCode);
-					receiver.send(statusCode, resultData);
-
-				}
-			}
 				break;
 
 			case GETAUTH: {
@@ -353,6 +331,9 @@ public class RestService extends IntentService {
 			Log.e(TAG, "There was a problem when sending the request.", e);
 			receiver.send(0, null);
 		} catch (IOException e) {
+			Log.e(TAG, "There was a problem when sending the request.", e);
+			receiver.send(0, null);
+		} catch (Exception e) {
 			Log.e(TAG, "There was a problem when sending the request.", e);
 			receiver.send(0, null);
 		}
