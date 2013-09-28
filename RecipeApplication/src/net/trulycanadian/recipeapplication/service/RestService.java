@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.trulycanadian.recipeapplication.service.restretrievel.AuthRetrieval;
 import net.trulycanadian.recipeapplication.service.restretrievel.GetRecipes;
 import net.trulycanadian.recipeapplication.service.restretrievel.SingleRecipe;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;
@@ -20,7 +21,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -112,43 +112,12 @@ public class RestService extends IntentService {
 
 				break;
 
-			case GETAUTH: {
-				request = new HttpGet();
-				System.out.println("got to get");
-				String combined = params.getString("username") + ":"
-						+ params.getString("password");
-				System.out.println(combined);
-				request.setHeader(
-						"Authorization",
-						"Basic "
-								+ Base64.encodeToString(combined.getBytes(),
-										Base64.NO_WRAP));
-				attachUriWithQuery(request, action, params);
-
-				resultData
-						.putInt(RestService.REST_COMMAND, RestService.GETAUTH);
-				if (request != null) {
-					HttpClient client = new DefaultHttpClient();
-
-					// Let's send some useful debug information so we can
-					// monitor
-					// things
-					// in LogCat.
-					Log.d(TAG, "Executing request: " + verbToString(verb)
-							+ ": " + action.toString());
-
-					// Finally, we send our request using HTTP. This is the
-					// synchronous
-					// long operation that we need to run on this thread.
-					HttpResponse response = client.execute(request);
-					StatusLine responseStatus = response.getStatusLine();
-					int statusCode = responseStatus != null ? responseStatus
-							.getStatusCode() : 0;
-					System.out.println("got to status code " + statusCode);
-					resultData.putInt("statuscode", statusCode);
-					receiver.send(statusCode, resultData);
-				}
-			}
+			case GETAUTH:
+				AuthRetrieval authRetrieval = new AuthRetrieval();
+				authRetrieval.setAction(action);
+				resultData = authRetrieval.retrieveResults(params);
+				status = resultData.getInt("statuscode");
+				receiver.send(status, resultData);
 				break;
 
 			case DELETE: {
