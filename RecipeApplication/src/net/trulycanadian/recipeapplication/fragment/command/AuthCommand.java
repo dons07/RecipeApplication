@@ -1,4 +1,4 @@
-package net.trulycanadian.recipeapplication.command;
+package net.trulycanadian.recipeapplication.fragment.command;
 
 import android.os.Bundle;
 import android.widget.Toast;

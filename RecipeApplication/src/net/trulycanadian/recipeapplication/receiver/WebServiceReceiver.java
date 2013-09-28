@@ -2,8 +2,8 @@ package net.trulycanadian.recipeapplication.receiver;
 
 import net.trulycanadian.recipeapplication.activity.LoginActivity;
 import net.trulycanadian.recipeapplication.activity.MainActivity;
-import net.trulycanadian.recipeapplication.command.Command;
-import net.trulycanadian.recipeapplication.command.CommandFactory;
+import net.trulycanadian.recipeapplication.fragment.command.Command;
+import net.trulycanadian.recipeapplication.fragment.command.CommandFactory;
 import net.trulycanadian.recipeapplication.service.RestService;
 import android.content.Context;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package net.trulycanadian.recipeapplication.command;
+package net.trulycanadian.recipeapplication.fragment.command;
 
 import net.trulycanadian.recipeapplication.activity.MainActivity;
 import net.trulycanadian.recipleapplication.model.RecipeDetailed;

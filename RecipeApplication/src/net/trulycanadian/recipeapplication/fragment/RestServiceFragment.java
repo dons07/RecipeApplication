@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import net.trulycanadian.recipeapplication.activity.LoginActivity;
 import net.trulycanadian.recipeapplication.activity.MainActivity;
-import net.trulycanadian.recipeapplication.command.Command;
-import net.trulycanadian.recipeapplication.command.CommandFactory;
+import net.trulycanadian.recipeapplication.fragment.command.Command;
+import net.trulycanadian.recipeapplication.fragment.command.CommandFactory;
 import net.trulycanadian.recipeapplication.receiver.WebServiceReceiver;
 import net.trulycanadian.recipeapplication.service.RestService;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;

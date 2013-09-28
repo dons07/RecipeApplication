@@ -1,4 +1,4 @@
-package net.trulycanadian.recipeapplication.restretrievel;
+package net.trulycanadian.recipeapplication.service.restretrievel;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,6 +14,16 @@ import android.util.Log;
 
 public class WebCommand {
 	public static final String TAG = WebCommand.class.getName();
+	Uri action;
+
+	public Uri getAction() {
+		return action;
+	}
+
+	public void setAction(Uri action) {
+		this.action = action;
+	}
+
 	protected static void attachUriWithQuery(HttpRequestBase request, Uri uri,
 			Bundle params) {
 		try {

@@ -1,4 +1,4 @@
-package net.trulycanadian.recipeapplication.command;
+package net.trulycanadian.recipeapplication.fragment.command;
 
 import org.apache.http.HttpStatus;
 

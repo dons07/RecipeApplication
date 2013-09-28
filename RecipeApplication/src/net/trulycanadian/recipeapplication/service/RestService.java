@@ -7,7 +7,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.trulycanadian.recipeapplication.restretrievel.GetRecipes;
+import net.trulycanadian.recipeapplication.service.restretrievel.GetRecipes;
+import net.trulycanadian.recipeapplication.service.restretrievel.SingleRecipe;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;
 import net.trulycanadian.recipleapplication.model.SimpleRecipe;
 import net.trulycanadian.recipleapplication.model.uuid;
@@ -92,46 +93,21 @@ public class RestService extends IntentService {
 					.get("ingredients");
 			// Let's build our request based on the HTTP verb we were
 			// given.
+			int status;
 			switch (verb) {
-			case SINGLERECIPE: {
-				request = new HttpGet();
-				System.out.println("got here");
-				String combined = params.getString("username") + ":"
-						+ params.getString("password");
-				System.out.println(combined);
-				request.setHeader(
-						"Authorization",
-						"Basic "
-								+ Base64.encodeToString(combined.getBytes(),
-										Base64.NO_WRAP));
-				attachUriWithQuery(request, action, params);
-
-				resultData.putInt(RestService.REST_COMMAND,
-						RestService.SINGLERECIPE);
-
-				if (request != null) {
-					HttpClient client = new DefaultHttpClient();
-
-					HttpResponse response = client.execute(request);
-
-					HttpEntity responseEntity = response.getEntity();
-					resultData.putString("json",
-							EntityUtils.toString(responseEntity));
-					StatusLine responseStatus = response.getStatusLine();
-					int statusCode = responseStatus != null ? responseStatus
-							.getStatusCode() : 0;
-					resultData.putInt("statuscode", statusCode);
-					receiver.send(statusCode, resultData);
-
-				}
-			}
+			case SINGLERECIPE:
+				SingleRecipe singleRecipe = new SingleRecipe();
+				singleRecipe.setAction(action);
+				resultData = singleRecipe.retrieveResults(params);
+				status = resultData.getInt("statuscode");
+				receiver.send(status, resultData);
 				break;
 
 			case GETRECIPES:
 				GetRecipes webCommand = new GetRecipes();
 				webCommand.setAction(action);
 				resultData = webCommand.retrieveResults(params);
-				int status = resultData.getInt("statuscode");
+				status = resultData.getInt("statuscode");
 				receiver.send(status, resultData);
 
 				break;
@@ -165,8 +141,6 @@ public class RestService extends IntentService {
 					// synchronous
 					// long operation that we need to run on this thread.
 					HttpResponse response = client.execute(request);
-
-					HttpEntity responseEntity = response.getEntity();
 					StatusLine responseStatus = response.getStatusLine();
 					int statusCode = responseStatus != null ? responseStatus
 							.getStatusCode() : 0;
@@ -277,7 +251,6 @@ public class RestService extends IntentService {
 					// synchronous
 					// long operation that we need to run on this thread.
 					HttpResponse response = client.execute(postRequest);
-					HttpEntity responseEntity = response.getEntity();
 					StatusLine responseStatus = response.getStatusLine();
 					int statusCode = responseStatus != null ? responseStatus
 							.getStatusCode() : 0;

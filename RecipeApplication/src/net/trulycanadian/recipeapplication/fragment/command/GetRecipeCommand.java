@@ -1,4 +1,4 @@
-package net.trulycanadian.recipeapplication.command;
+package net.trulycanadian.recipeapplication.fragment.command;
 
 import java.util.ArrayList;
 import java.util.Arrays;
