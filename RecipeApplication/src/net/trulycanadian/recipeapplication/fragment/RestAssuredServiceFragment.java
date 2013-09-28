@@ -35,20 +35,7 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 		intent.putExtra(RestService.EXTRA_HTTP_VERB, RestService.SINGLERECIPE);
 		intent.putExtra(RestService.ARGS_PARAMS, params);
 		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
-
-		if (intent == null) {
-			System.out.println("error");
-
-		} else {
-		}
-		// Here we send our Intent to our RESTService.
 		activity.startService(intent);
-		if (activity != null) {
-			// Here we check to see if our activity is null or not.
-			// We only want to update our views if our activity exists.
-
-			// Load our list adapter with our Tweets.
-		}
 	}
 
 	public void getRecipes() {
@@ -60,21 +47,7 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 		intent.putExtra(RestService.EXTRA_HTTP_VERB, RestService.GETRECIPES);
 		intent.putExtra(RestService.ARGS_PARAMS, params);
 		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
-
-		if (intent == null) {
-			System.out.println("error");
-
-		} else {
-		}
-		// Here we send our Intent to our RESTService.
 		activity.startService(intent);
-		if (activity != null) {
-			// Here we check to see if our activity is null or not.
-			// We only want to update our views if our activity exists.
-
-			// Load our list adapter with our Tweets.
-		}
-
 	}
 
 	public void insertRecipe(SimpleRecipe recipe,
@@ -89,21 +62,7 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
 		intent.putExtra("recipe", recipe);
 		intent.putExtra("ingredients", ingredients);
-
-		if (intent == null) {
-			System.out.println("error");
-
-		} else {
-		}
-		// Here we send our Intent to our RESTService.
 		activity.startService(intent);
-		if (activity != null) {
-			// Here we check to see if our activity is null or not.
-			// We only want to update our views if our activity exists.
-
-			// Load our list adapter with our Tweets.
-		}
-
 	}
 
 	public void checkAuthenticaiton() {
@@ -121,14 +80,7 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 		intent.putExtra(RestService.ARGS_PARAMS, params);
 		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
 
-		// Here we send our Intent to our RESTService.
 		activity.startService(intent);
-		if (activity != null) {
-			// Here we check to see if our activity is null or not.
-			// We only want to update our views if our activity exists.
-
-			// Load our list adapter with our Tweets.
-		}
 	}
 
 	public void onRESTResult(int code, Bundle result) {

@@ -11,7 +11,6 @@ public class CommandFactory {
 			command = new GetRecipeCommand();
 			return command;
 		case RestService.GETAUTH:
-			System.out.println("got here");
 			command = new AuthCommand();
 			return command;
 		case RestService.SINGLERECIPE:
