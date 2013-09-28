@@ -6,35 +6,38 @@ import net.trulycanadian.recipeapplication.activity.LoginActivity;
 import net.trulycanadian.recipeapplication.activity.MainActivity;
 import net.trulycanadian.recipeapplication.command.Command;
 import net.trulycanadian.recipeapplication.command.CommandFactory;
+import net.trulycanadian.recipeapplication.receiver.WebServiceReceiver;
 import net.trulycanadian.recipeapplication.service.RestService;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;
 import net.trulycanadian.recipleapplication.model.SimpleRecipe;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 
-public class RestAssuredServiceFragment extends RESTResponderFragment {
+public class RestServiceFragment extends Fragment {
 
-	private static String TAG = RestAssuredServiceFragment.class.getName();
-
+	private static String TAG = RestServiceFragment.class.getName();
+	private WebServiceReceiver receiver;
+	
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-		// This gets called each time our Activity has finished creating itself.
-
+		receiver = new WebServiceReceiver(new Handler());
+		receiver.setContext(getActivity());
 	}
 
 	public void getSingleRecipe(String id) {
 		MainActivity activity = (MainActivity) getActivity();
 		Bundle params = activity.getUserBundle();
-		System.out.println(params.getString("username"));
 		Intent intent = new Intent(activity, RestService.class);
 		intent.setData(Uri
 				.parse("http://rental.trulycanadian.net:8080/recipe/api/recipe/"
 						+ id));
 		intent.putExtra(RestService.EXTRA_HTTP_VERB, RestService.SINGLERECIPE);
 		intent.putExtra(RestService.ARGS_PARAMS, params);
-		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+		receiver.setContext(activity);
+		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, receiver);
 		activity.startService(intent);
 	}
 
@@ -46,7 +49,8 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 				.parse("http://rental.trulycanadian.net:8080/recipe/api/recipe"));
 		intent.putExtra(RestService.EXTRA_HTTP_VERB, RestService.GETRECIPES);
 		intent.putExtra(RestService.ARGS_PARAMS, params);
-		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+		receiver.setContext(activity);
+		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, receiver);
 		activity.startService(intent);
 	}
 
@@ -59,7 +63,8 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 				.parse("http://rental.trulycanadian.net:8080/recipe/api/recipe"));
 		intent.putExtra(RestService.EXTRA_HTTP_VERB, RestService.POSTRECIPE);
 		intent.putExtra(RestService.ARGS_PARAMS, params);
-		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+		receiver.setContext(activity);
+		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, receiver);
 		intent.putExtra("recipe", recipe);
 		intent.putExtra("ingredients", ingredients);
 		activity.startService(intent);
@@ -78,7 +83,9 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 		Bundle params = activity.getUserBundle();
 
 		intent.putExtra(RestService.ARGS_PARAMS, params);
-		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, getResultReceiver());
+		receiver.setContext(activity);
+		intent.putExtra(RestService.EXTRA_RESULT_RECEIVER, receiver);
+		
 
 		activity.startService(intent);
 	}

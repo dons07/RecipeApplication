@@ -8,7 +8,7 @@ import net.trulycanadian.recipeapplication.algo.PassEncoding;
 import net.trulycanadian.recipeapplication.fragment.InsertIngredient;
 import net.trulycanadian.recipeapplication.fragment.InsertRecipe;
 import net.trulycanadian.recipeapplication.fragment.ListRecipes;
-import net.trulycanadian.recipeapplication.fragment.RestAssuredServiceFragment;
+import net.trulycanadian.recipeapplication.fragment.RestServiceFragment;
 import net.trulycanadian.recipeapplication.fragment.SingleRecipe;
 import net.trulycanadian.recipleapplication.model.RecipeDetailed;
 import net.trulycanadian.recipleapplication.model.RecipeSum;
@@ -25,7 +25,7 @@ import android.support.v4.app.FragmentTransaction;
 public class MainActivity extends FragmentActivity {
 	private SimpleRecipe recipe;
 	private ArrayList<SimpleIngredients> ingredients;
-	RestAssuredServiceFragment responder;
+	RestServiceFragment responder;
 
 	SharedPreferences appPrefs1;
 	String prefs1 = "recipeapplication";
@@ -39,10 +39,10 @@ public class MainActivity extends FragmentActivity {
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
 
-		responder = (RestAssuredServiceFragment) fm
+		responder = (RestServiceFragment) fm
 				.findFragmentByTag("RESTResponder");
 		if (responder == null) {
-			responder = new RestAssuredServiceFragment();
+			responder = new RestServiceFragment();
 //** Add Fragment responder for Web Service Calls.
 			
 			ft.add(responder, "RESTResponder");

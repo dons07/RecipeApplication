@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ListRecipes extends ListFragment {
-	private static String TAG = RestAssuredServiceFragment.class.getName();
+	private static String TAG = RestServiceFragment.class.getName();
 	private View view;
 	private RecipeAdapter recipeAdapter;
 
