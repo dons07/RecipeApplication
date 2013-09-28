@@ -43,10 +43,8 @@ public class MainActivity extends FragmentActivity {
 				.findFragmentByTag("RESTResponder");
 		if (responder == null) {
 			responder = new RestAssuredServiceFragment();
-
-			// We add the fragment using a Tag since it has no views. It will
-			// make the Twitter REST call
-			// for us each time this Activity is created.
+//** Add Fragment responder for Web Service Calls.
+			
 			ft.add(responder, "RESTResponder");
 		}
 
