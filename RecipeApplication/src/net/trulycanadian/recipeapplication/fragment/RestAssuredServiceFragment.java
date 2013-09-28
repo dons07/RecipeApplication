@@ -1,26 +1,17 @@
 package net.trulycanadian.recipeapplication.fragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import net.trulycanadian.recipeapplication.activity.LoginActivity;
 import net.trulycanadian.recipeapplication.activity.MainActivity;
+import net.trulycanadian.recipeapplication.command.Command;
+import net.trulycanadian.recipeapplication.command.CommandFactory;
 import net.trulycanadian.recipeapplication.service.RestService;
-import net.trulycanadian.recipleapplication.model.RecipeDetailed;
-import net.trulycanadian.recipleapplication.model.RecipeSum;
 import net.trulycanadian.recipleapplication.model.SimpleIngredients;
 import net.trulycanadian.recipleapplication.model.SimpleRecipe;
-
-import org.apache.http.HttpStatus;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class RestAssuredServiceFragment extends RESTResponderFragment {
 
@@ -140,63 +131,20 @@ public class RestAssuredServiceFragment extends RESTResponderFragment {
 		}
 	}
 
-	@Override
-	public void onRESTResult(int code, String result, String returnType) {
-		// Here is where we handle our REST response. This is similar to the
-		// LoaderCallbacks<D>.onLoadFinished() call from the previous tutorial.
+	public void onRESTResult(int code, Bundle result) {
 
-		// Check to see if we got an HTTP 200 code and have some data.
-		if (code == 200 && returnType == RestService.REST_AUTHENTICATION) {
-			LoginActivity activity = (LoginActivity) getActivity();
-			activity.startMainActivity();
-			// For really complicated JSON decoding I usually do my heavy
-			// lifting
-			// with Gson and proper model classes, but for now let's keep it
-			// simple
-			// and use a utility method that relies on some of the built in
-			// JSON utilities on Android.
-
-		} else if (code == HttpStatus.SC_CREATED
-				&& returnType == RestService.REST_POST_RECIPE) {
-			Activity activity = getActivity();
-			Toast.makeText(activity, "Inserted Recipe and ingredients",
-					Toast.LENGTH_SHORT).show();
-		} else if (code == 401 && returnType == RestService.REST_AUTHENTICATION) {
-			LoginActivity activity = (LoginActivity) getActivity();
-			activity.clearUserName();
-			Toast.makeText(activity, "Invalid user name or password.",
-					Toast.LENGTH_SHORT).show();
-
+		Command command = CommandFactory.createCommand(result
+				.getInt(RestService.REST_COMMAND));
+		if (result.getInt(RestService.REST_COMMAND) != RestService.GETAUTH) {
+			System.out.println("inside main");
+			MainActivity activity = (MainActivity) getActivity();
+			command.setActivity(activity);
 		} else {
-			System.out.println(returnType + " " + code);
+			System.out.println("inside auth");
+			LoginActivity activity2 = (LoginActivity) getActivity();
+			command.setLoginActivity(activity2);
 		}
-	}
+		command.parseWebResult(result);
 
-	public void onRESTResultJson(int code, String returnType, Bundle result) {
-
-		System.out.println(returnType + code);
-		if (code == HttpStatus.SC_OK
-				&& returnType == RestService.REST_GET_RECIPES) {
-
-			String json = result.getString("json");
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			RecipeSum[] recipeSums = gson.fromJson(json, RecipeSum[].class);
-			ArrayList<RecipeSum> recipeSumsArray = new ArrayList<RecipeSum>(
-					Arrays.asList(recipeSums));
-			MainActivity activity = (MainActivity) getActivity();
-			activity.setRecipes(recipeSumsArray);
-		}
-		if (code == HttpStatus.SC_OK
-				&& returnType == RestService.REST_SINGLE_RECIPE) {
-			String json = result.getString("json");
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			MainActivity activity = (MainActivity) getActivity();
-			RecipeDetailed detailed = gson.fromJson(json, RecipeDetailed.class);
-			System.out.println(json);
-			System.out.println(detailed.getName());
-			System.out.println(detailed.getHealthrating());
-			activity.setDetailedRecipe(detailed);
-
-		}
 	}
 }

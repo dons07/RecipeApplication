@@ -51,14 +51,11 @@ public class RestService extends IntentService {
 	public static final int GETRECIPES = 0x7;
 	public static final int SINGLERECIPE = 0x8;
 
-	public static final String EXTRA_HTTP_VERB = "net.neilgoodman.android.restservicetutorial.EXTRA_HTTP_VERB";
+	public static final String EXTRA_HTTP_VERB = "net.trulycanadian.recipeapplication.EXTRA_HTTP_VERB";
 	public static final String ARGS_PARAMS = "net.trulycanadian.recipeapplication.activity.ARGS_PARAMS";
-	public static final String EXTRA_RESULT_RECEIVER = "net.neilgoodman.android.restservicetutorial.EXTRA_RESULT_RECEIVER";
+	public static final String EXTRA_RESULT_RECEIVER = "net.trulycanadian.recipeapplication.EXTRA_RESULT_RECEIVER";
 
-	public static final String REST_AUTHENTICATION = "net.trulycanadian.AUTHENTICATION";
-	public static final String REST_POST_RECIPE = "net.trulycanadian.POSTRECIPE";
-	public static final String REST_GET_RECIPES = "net.trulycanadian.GETRECIPES";
-	public static final String REST_SINGLE_RECIPE = "net.trulycanadian.SINGLERECIPE";
+	public static final String REST_COMMAND = "net.trulycanadian.recipeapplication.COMMAND";
 
 	public RestService() {
 		super(TAG);
@@ -108,20 +105,12 @@ public class RestService extends IntentService {
 										Base64.NO_WRAP));
 				attachUriWithQuery(request, action, params);
 
-				resultData.putString(this.REST_SINGLE_RECIPE, "GetRecipe");
+				resultData.putInt(RestService.REST_COMMAND,
+						RestService.SINGLERECIPE);
+
 				if (request != null) {
 					HttpClient client = new DefaultHttpClient();
 
-					// Let's send some useful debug information so we can
-					// monitor
-					// things
-					// in LogCat.
-					Log.d(TAG, "Executing request: " + verbToString(verb)
-							+ ": " + action.toString());
-
-					// Finally, we send our request using HTTP. This is the
-					// synchronous
-					// long operation that we need to run on this thread.
 					HttpResponse response = client.execute(request);
 
 					HttpEntity responseEntity = response.getEntity();
@@ -130,22 +119,9 @@ public class RestService extends IntentService {
 					StatusLine responseStatus = response.getStatusLine();
 					int statusCode = responseStatus != null ? responseStatus
 							.getStatusCode() : 0;
+					resultData.putInt("statuscode", statusCode);
+					receiver.send(statusCode, resultData);
 
-					// Our ResultReceiver allows us to communicate back the
-					// results
-					// to the caller. This
-					// class has a method named send() that can send back a code
-					// and
-					// a Bundle
-					// of data. ResultReceiver and IntentService abstract away
-					// all
-					// the IPC code
-					// we would need to write to normally make this work.
-					if (responseEntity != null) {
-						receiver.send(statusCode, resultData);
-					} else {
-						receiver.send(statusCode, null);
-					}
 				}
 			}
 				break;
@@ -163,44 +139,21 @@ public class RestService extends IntentService {
 										Base64.NO_WRAP));
 				attachUriWithQuery(request, action, params);
 
-				resultData.putString(REST_GET_RECIPES, "GetRecipes");
+				resultData.putInt(RestService.REST_COMMAND,
+						RestService.GETRECIPES);
 				if (request != null) {
 					HttpClient client = new DefaultHttpClient();
 
-					// Let's send some useful debug information so we can
-					// monitor
-					// things
-					// in LogCat.
-					Log.d(TAG, "Executing request: " + verbToString(verb)
-							+ ": " + action.toString());
-
-					// Finally, we send our request using HTTP. This is the
-					// synchronous
-					// long operation that we need to run on this thread.
 					HttpResponse response = client.execute(request);
-
 					HttpEntity responseEntity = response.getEntity();
 					resultData.putString("json",
 							EntityUtils.toString(responseEntity));
 					StatusLine responseStatus = response.getStatusLine();
 					int statusCode = responseStatus != null ? responseStatus
 							.getStatusCode() : 0;
+					resultData.putInt("statuscode", statusCode);
+					receiver.send(statusCode, resultData);
 
-					// Our ResultReceiver allows us to communicate back the
-					// results
-					// to the caller. This
-					// class has a method named send() that can send back a code
-					// and
-					// a Bundle
-					// of data. ResultReceiver and IntentService abstract away
-					// all
-					// the IPC code
-					// we would need to write to normally make this work.
-					if (responseEntity != null) {
-						receiver.send(statusCode, resultData);
-					} else {
-						receiver.send(statusCode, null);
-					}
 				}
 			}
 				break;
@@ -218,7 +171,8 @@ public class RestService extends IntentService {
 										Base64.NO_WRAP));
 				attachUriWithQuery(request, action, params);
 
-				resultData.putString(REST_AUTHENTICATION, "Authentication");
+				resultData
+						.putInt(RestService.REST_COMMAND, RestService.GETAUTH);
 				if (request != null) {
 					HttpClient client = new DefaultHttpClient();
 
@@ -239,21 +193,8 @@ public class RestService extends IntentService {
 					int statusCode = responseStatus != null ? responseStatus
 							.getStatusCode() : 0;
 					System.out.println("got to status code " + statusCode);
-					// Our ResultReceiver allows us to communicate back the
-					// results
-					// to the caller. This
-					// class has a method named send() that can send back a code
-					// and
-					// a Bundle
-					// of data. ResultReceiver and IntentService abstract away
-					// all
-					// the IPC code
-					// we would need to write to normally make this work.
-					if (responseEntity != null) {
-						receiver.send(statusCode, resultData);
-					} else {
-						receiver.send(statusCode, null);
-					}
+					resultData.putInt("statuscode", statusCode);
+					receiver.send(statusCode, resultData);
 				}
 			}
 				break;
@@ -265,7 +206,8 @@ public class RestService extends IntentService {
 				break;
 
 			case POSTRECIPE: {
-				resultData.putString(REST_POST_RECIPE, "Authentication");
+				resultData.putInt(RestService.REST_COMMAND,
+						RestService.POSTRECIPE);
 				request = new HttpPost();
 				request.setURI(new URI(action.toString()));
 
@@ -316,21 +258,6 @@ public class RestService extends IntentService {
 					int statusCode = responseStatus != null ? responseStatus
 							.getStatusCode() : 0;
 					System.out.println("got to status code " + statusCode);
-					// Our ResultReceiver allows us to communicate back the
-					// results
-					// to the caller. This
-					// class has a method named send() that can send back a code
-					// and
-					// a Bundle
-					// of data. ResultReceiver and IntentService abstract away
-					// all
-					// the IPC code
-					// we would need to write to normally make this work.
-					// if (responseEntity != null) {
-					// receiver.send(statusCode, resultData);
-					// } else {
-					// receiver.send(statusCode, null);
-					// }
 				}
 			}
 
@@ -387,11 +314,11 @@ public class RestService extends IntentService {
 					// all
 					// the IPC code
 					// we would need to write to normally make this work.
-					if (responseEntity != null) {
-						receiver.send(statusCode, resultData);
-					} else {
-						receiver.send(statusCode, null);
-					}
+					resultData.putInt(RestService.REST_COMMAND,
+							RestService.POSTRECIPE);
+					resultData.putInt("statuscode", statusCode);
+					receiver.send(statusCode, resultData);
+
 				}
 
 			}
