@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import net.trulycanadian.recipeapplication.R;
 import net.trulycanadian.recipeapplication.activity.MainActivity;
 import net.trulycanadian.recipeapplication.adapter.RecipeAdapter;
-import net.trulycanadian.recipleapplication.model.RecipeSum;
+import net.trulycanadian.recipeapplication.model.RecipeSum;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;

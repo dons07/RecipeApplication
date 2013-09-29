@@ -2,7 +2,7 @@ package net.trulycanadian.recipeapplication.fragment;
 
 import net.trulycanadian.recipeapplication.R;
 import net.trulycanadian.recipeapplication.activity.MainActivity;
-import net.trulycanadian.recipleapplication.model.SimpleRecipe;
+import net.trulycanadian.recipeapplication.model.SimpleRecipe;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

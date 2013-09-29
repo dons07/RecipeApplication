@@ -7,39 +7,24 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.trulycanadian.recipeapplication.model.SimpleIngredients;
+import net.trulycanadian.recipeapplication.model.SimpleRecipe;
 import net.trulycanadian.recipeapplication.service.restretrievel.AuthRetrieval;
 import net.trulycanadian.recipeapplication.service.restretrievel.GetRecipes;
+import net.trulycanadian.recipeapplication.service.restretrievel.PostRecipe;
 import net.trulycanadian.recipeapplication.service.restretrievel.SingleRecipe;
-import net.trulycanadian.recipleapplication.model.SimpleIngredients;
-import net.trulycanadian.recipleapplication.model.SimpleRecipe;
-import net.trulycanadian.recipleapplication.model.uuid;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.util.Base64;
 import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class RestService extends IntentService {
 	public static final String TAG = RestService.class.getName();
@@ -82,13 +67,13 @@ public class RestService extends IntentService {
 		// We default to GET if no verb was specified.
 		int verb = extras.getInt(EXTRA_HTTP_VERB, GETAUTH);
 		Bundle params = extras.getParcelable(ARGS_PARAMS);
+		SimpleRecipe recipe = (SimpleRecipe) extras.get("recipe");
 		ResultReceiver receiver = extras.getParcelable(EXTRA_RESULT_RECEIVER);
 
 		try {
 			// Here we define our base request object which we will
 			// send to our REST service via HttpClient.
 			HttpRequestBase request = null;
-			String json;
 			ArrayList<SimpleIngredients> ingredients = (ArrayList<SimpleIngredients>) extras
 					.get("ingredients");
 			// Let's build our request based on the HTTP verb we were
@@ -118,6 +103,7 @@ public class RestService extends IntentService {
 				resultData = authRetrieval.retrieveResults(params);
 				status = resultData.getInt("statuscode");
 				receiver.send(status, resultData);
+
 				break;
 
 			case DELETE: {
@@ -126,137 +112,14 @@ public class RestService extends IntentService {
 			}
 				break;
 
-			case POSTRECIPE: {
-				resultData.putInt(RestService.REST_COMMAND,
-						RestService.POSTRECIPE);
-				request = new HttpPost();
-				request.setURI(new URI(action.toString()));
-
-				SimpleRecipe recipe = (SimpleRecipe) extras.get("recipe");
-
-				Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-				json = gson.toJson(recipe);// Attach form entity if necessary.
-											// Note: some REST APIs
-				// require you to POST JSON. This is easy to do, simply use
-				// postRequest.setHeader('Content-Type', 'application/json')
-				// and StringEntity instead. Same thing for the PUT case
-				// below.
-				String combined = params.getString("username") + ":"
-						+ params.getString("password");
-				HttpPost postRequest = (HttpPost) request;
-				request.setHeader(
-						"Authorization",
-						"Basic "
-								+ Base64.encodeToString(combined.getBytes(),
-										Base64.NO_WRAP));
-				if (request != null) {
-					HttpClient client = new DefaultHttpClient();
-
-					StringEntity entity = new StringEntity(json, HTTP.UTF_8);
-					entity.setContentType("application/json");
-					postRequest.setEntity(entity);
-					// Let's send some useful debug information so we can
-					// monitor
-					// things
-					// in LogCat.
-					Log.d(TAG, "Executing request: " + verbToString(verb)
-							+ ": " + action.toString());
-
-					// Finally, we send our request using HTTP. This is the
-					// synchronous
-					// long operation that we need to run on this thread.
-					HttpResponse response = client.execute(postRequest);
-
-					HttpEntity responseEntity = response.getEntity();
-					gson = new GsonBuilder().setPrettyPrinting().create();
-					uuid uuid = gson.fromJson(
-							EntityUtils.toString(responseEntity), uuid.class);
-
-					setIngredients(uuid.getUuid(), ingredients);
-
-					StatusLine responseStatus = response.getStatusLine();
-					int statusCode = responseStatus != null ? responseStatus
-							.getStatusCode() : 0;
-					System.out.println("got to status code " + statusCode);
-				}
-			}
-
-			case POSTINGREDIENT: {
-
-				// Attach form entity if necessary. Note: some REST APIs
-				// require you to POST JSON. This is easy to do, simply use
-				// postRequest.setHeader('Content-Type', 'application/json')
-				// and StringEntity instead. Same thing for the PUT case
-				// below.
-				HttpPost postRequest = new HttpPost(
-						"http://rental.trulycanadian.net:8080/recipe/api/ingredients/jsonArray");
-				String combined = params.getString("username") + ":"
-						+ params.getString("password");
-				postRequest.setHeader(
-						"Authorization",
-						"Basic "
-								+ Base64.encodeToString(combined.getBytes(),
-										Base64.NO_WRAP));
-
-				if (request != null) {
-					HttpClient client = new DefaultHttpClient();
-					Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-					json = gson.toJson(ingredients);
-					System.out.println(json);
-					StringEntity entity = new StringEntity(json, HTTP.UTF_8);
-					entity.setContentType("application/json");
-					postRequest.setEntity(entity);
-
-					// Let's send some useful debug information so we can
-					// monitor
-					// things
-					// in LogCat.
-					Log.d(TAG, "Executing request: " + verbToString(verb)
-							+ ": " + action.toString());
-
-					// Finally, we send our request using HTTP. This is the
-					// synchronous
-					// long operation that we need to run on this thread.
-					HttpResponse response = client.execute(postRequest);
-					StatusLine responseStatus = response.getStatusLine();
-					int statusCode = responseStatus != null ? responseStatus
-							.getStatusCode() : 0;
-					System.out.println("got to status code " + statusCode);
-					// Our ResultReceiver allows us to communicate back the
-					// results
-					// to the caller. This
-					// class has a method named send() that can send back a code
-					// and
-					// a Bundle
-					// of data. ResultReceiver and IntentService abstract away
-					// all
-					// the IPC code
-					// we would need to write to normally make this work.
-					resultData.putInt(RestService.REST_COMMAND,
-							RestService.POSTRECIPE);
-					resultData.putInt("statuscode", statusCode);
-					receiver.send(statusCode, resultData);
-
-				}
-
-			}
-				break;
-
-			case PUT: {
-				request = new HttpPut();
-				request.setURI(new URI(action.toString()));
-
-				// Attach form entity if necessary.
-				HttpPut putRequest = (HttpPut) request;
-
-				if (params != null) {
-					UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
-							paramsToList(params));
-					putRequest.setEntity(formEntity);
-				}
-			}
+			case POSTRECIPE:
+				PostRecipe postRecipe = new PostRecipe();
+				postRecipe.setAction(action);
+				postRecipe.setRecipe(recipe);
+				postRecipe.setIngredients(ingredients);
+				resultData = postRecipe.retrieveResults(params);
+				status = resultData.getInt("statuscode");
+				receiver.send(status, resultData);
 				break;
 			}
 

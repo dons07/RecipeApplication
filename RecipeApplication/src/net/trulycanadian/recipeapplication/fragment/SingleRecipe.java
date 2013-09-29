@@ -1,8 +1,8 @@
 package net.trulycanadian.recipeapplication.fragment;
 
 import net.trulycanadian.recipeapplication.R;
-import net.trulycanadian.recipleapplication.model.RecipeDetailed;
-import net.trulycanadian.recipleapplication.model.SimpleIngredients;
+import net.trulycanadian.recipeapplication.model.RecipeDetailed;
+import net.trulycanadian.recipeapplication.model.SimpleIngredients;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

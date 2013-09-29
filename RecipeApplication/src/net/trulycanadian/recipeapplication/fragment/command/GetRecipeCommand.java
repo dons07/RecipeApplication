@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import net.trulycanadian.recipeapplication.activity.MainActivity;
-import net.trulycanadian.recipleapplication.model.RecipeSum;
+import net.trulycanadian.recipeapplication.model.RecipeSum;
 
 import org.apache.http.HttpStatus;
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import net.trulycanadian.recipeapplication.R;
 import net.trulycanadian.recipeapplication.activity.MainActivity;
-import net.trulycanadian.recipleapplication.model.SimpleIngredients;
+import net.trulycanadian.recipeapplication.model.SimpleIngredients;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

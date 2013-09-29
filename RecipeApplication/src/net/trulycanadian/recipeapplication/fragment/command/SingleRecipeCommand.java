@@ -1,7 +1,7 @@
 package net.trulycanadian.recipeapplication.fragment.command;
 
 import net.trulycanadian.recipeapplication.activity.MainActivity;
-import net.trulycanadian.recipleapplication.model.RecipeDetailed;
+import net.trulycanadian.recipeapplication.model.RecipeDetailed;
 
 import org.apache.http.HttpStatus;
 
