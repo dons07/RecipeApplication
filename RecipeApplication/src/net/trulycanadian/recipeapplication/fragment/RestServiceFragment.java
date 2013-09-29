@@ -89,21 +89,4 @@ public class RestServiceFragment extends Fragment {
 
 		activity.startService(intent);
 	}
-
-	public void onRESTResult(int code, Bundle result) {
-
-		Command command = CommandFactory.createCommand(result
-				.getInt(RestService.REST_COMMAND));
-		if (result.getInt(RestService.REST_COMMAND) != RestService.GETAUTH) {
-			System.out.println("inside main");
-			MainActivity activity = (MainActivity) getActivity();
-			command.setActivity(activity);
-		} else {
-			System.out.println("inside auth");
-			LoginActivity activity2 = (LoginActivity) getActivity();
-			command.setLoginActivity(activity2);
-		}
-		command.parseWebResult(result);
-
-	}
 }
