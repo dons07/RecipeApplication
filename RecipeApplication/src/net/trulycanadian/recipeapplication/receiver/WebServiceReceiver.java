@@ -21,7 +21,7 @@ public class WebServiceReceiver extends ResultReceiver {
 	}
 
 	Context context;
-	
+
 	public WebServiceReceiver(Handler handler) {
 		super(handler);
 	}
@@ -39,7 +39,8 @@ public class WebServiceReceiver extends ResultReceiver {
 			LoginActivity activity2 = (LoginActivity) context;
 			command.setLoginActivity(activity2);
 		}
-		command.parseWebResult(result);
+		if (command.getActivity() != null || command.getLoginActivity() != null)
+			command.parseWebResult(result);
 
 	}
 }
