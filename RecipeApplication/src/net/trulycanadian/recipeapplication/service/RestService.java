@@ -117,7 +117,7 @@ public class RestService extends IntentService {
 				postRecipe.setAction(action);
 				postRecipe.setRecipe(recipe);
 				postRecipe.setIngredients(ingredients);
-				resultData = postRecipe.retrieveResults(params);
+				resultData = postRecipe.executeStatement(params);
 				status = resultData.getInt("statuscode");
 				receiver.send(status, resultData);
 				break;

@@ -48,7 +48,7 @@ public class PostRecipe extends WebCommand {
 	SimpleRecipe recipe;
 	ArrayList<SimpleIngredients> ingredients;
 
-	public Bundle retrieveResults(Bundle params) throws Exception {
+	public Bundle executeStatement(Bundle params) throws Exception {
 		processRecipe(params);
 		processIngredients(params);
 		return resultData;
