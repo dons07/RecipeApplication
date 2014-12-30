@@ -1,6 +1,8 @@
 RecipeApplication
 =================
 
+This application contacts a REST Controller and adds/deletes/update recipes.  Each recipe contains an ingredients and other properties.
+
 Copyright (C) Dave Germiquet
 
 This program is free software; you can redistribute it and/or
